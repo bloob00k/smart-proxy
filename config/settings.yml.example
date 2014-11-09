@@ -44,6 +44,7 @@
 # Log configuration
 # Uncomment and modify if you want to change the location of the log file or use STDOUT
 #:log_file: /var/log/foreman-proxy/proxy.log
+:log_file: /tmp/proxy.log
 # Uncomment and modify if you want to change the log level
 # WARN, DEBUG, ERROR, FATAL, INFO, UNKNOWN
-#:log_level: ERROR
+:log_level: INFO

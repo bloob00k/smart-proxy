@@ -52,6 +52,7 @@ module Proxy
   require 'bmc/bmc'
   require 'chef_proxy/chef'
   require "realm/realm"
+  require "metadata/metadata"
 
   def self.version
     {:version => VERSION}
