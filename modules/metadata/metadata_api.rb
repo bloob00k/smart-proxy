@@ -1,6 +1,33 @@
 require 'metadata/server'
 require 'proxy/validations'
 
+
+=begin
+ * $ curl http://169.254.169.254/latest/meta-data/    
+ami-id
+ami-launch-index
+ami-manifest-path
+block-device-mapping/
+hostname
+instance-action
+instance-id
+instance-type
+kernel-id
+local-hostname
+local-ipv4
+mac
+network/
+placement/
+public-hostname
+public-ipv4
+public-keys/
+reservation-id
+security-groups
+services/
+
+=end
+
+
 module Proxy::Metadata
   class Api < ::Sinatra::Base
     include ::Proxy::Log
@@ -16,11 +43,12 @@ module Proxy::Metadata
         eval "Proxy::TFTP::#{variant.capitalize}.new"
       end
 
-      def create variant, mac
-        tftp = instantiate variant, mac
-        log_halt(400, "TFTP: Failed to create pxe config file: ") {tftp.set(mac, (params[:pxeconfig] || params[:syslinux_config]))}
+      def create ip, key, value = nil
+        print "#{key} for #{ip}: #{value}"
+       # tftp = instantiate variant, mac
+       # log_halt(400, "TFTP: Failed to create pxe config file: ") {tftp.set(mac, (params[:pxeconfig] || params[:syslinux_config]))}
       end
-      def delete variant, mac
+      def delete ip
         tftp = instantiate variant, mac
         log_halt(400, "TFTP: Failed to delete pxe config file: ") {tftp.del(mac)}
       end
@@ -43,12 +71,13 @@ module Proxy::Metadata
       log_halt(404, "TFTP: Failed to retrieve pxe config file: ") {tftp.get(mac)}
     end
 
-    post "/:variant/:mac" do |variant, mac|
-      create variant, mac
-    end
-
-    delete "/:variant/:mac" do |variant, mac|
-      delete variant, mac
+    post "/:ip/:key" do |ip, key|
+      #create variant, mac
+      create ip, "#{key}", params[:value]
+    end    
+    
+    delete "/:ip" do |ip|
+      delete ip
     end
 
     post "/create_default" do
