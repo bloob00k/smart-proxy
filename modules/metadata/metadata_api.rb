@@ -49,8 +49,9 @@ module Proxy::Metadata
        # log_halt(400, "TFTP: Failed to create pxe config file: ") {tftp.set(mac, (params[:pxeconfig] || params[:syslinux_config]))}
       end
       def delete ip
-        tftp = instantiate variant, mac
-        log_halt(400, "TFTP: Failed to delete pxe config file: ") {tftp.del(mac)}
+        print "delete metadata for #{ip}"
+        #tftp = instantiate variant, mac
+        #log_halt(400, "TFTP: Failed to delete pxe config file: ") {tftp.del(mac)}
       end
       def create_default variant
         tftp = instantiate variant
